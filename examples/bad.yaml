@@ -1,0 +1,32 @@
+# Deliberately broken: every mistake below is caught before anything is deployed.
+name: Shop_Prod
+environment: prod
+
+network:
+  cidr: 8.8.0.0/16          # public range
+  public_subnets: 1         # the ALB needs 2
+  private_subnets: 1        # the database needs 2
+  nat_gateway: false
+
+instances:
+  - name: app
+    count: 1
+    instance_type: m5.4xlarge
+    placement: public
+    ssh_cidr: 0.0.0.0/0     # SSH open to the world
+    imdsv2: false
+
+loadbalancer:
+  target: web               # no such instance group
+  listener: http
+
+database:
+  publicly_accessible: true
+  encrypted: false
+  multi_az: false
+  backup_retention_days: 1
+
+buckets:
+  - name: "Assets!"
+    public: true
+    encryption: false

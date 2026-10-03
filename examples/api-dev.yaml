@@ -1,0 +1,27 @@
+# A small dev environment: one API server, a database and a bucket. No load balancer.
+name: api
+region: eu-west-3
+environment: dev
+
+tags:
+  owner: backend-team
+  cost_center: cc-2001
+
+network:
+  cidr: 10.30.0.0/20
+  public_subnets: 2
+  private_subnets: 2
+  nat_gateway: true
+
+instances:
+  - name: api
+    instance_type: t3.micro
+    port: 3000
+
+database:
+  engine: mysql
+  storage_gb: 20
+
+buckets:
+  - name: uploads
+    versioning: false

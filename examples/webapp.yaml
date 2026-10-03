@@ -1,0 +1,37 @@
+# A production web application: HTTPS load balancer, two app servers,
+# a Multi-AZ PostgreSQL database and one private bucket.
+name: shop
+region: eu-west-3
+environment: prod
+
+tags:
+  owner: platform-team
+  cost_center: cc-1042
+
+network:
+  cidr: 10.20.0.0/16
+  public_subnets: 2
+  private_subnets: 2
+  nat_gateway: true
+
+instances:
+  - name: app
+    count: 2
+    instance_type: t3.small
+    port: 8080
+
+loadbalancer:
+  target: app
+  listener: https
+  certificate_arn: arn:aws:acm:eu-west-3:123456789012:certificate/00000000-0000-0000-0000-000000000000
+  health_check_path: /health
+
+database:
+  engine: postgres
+  instance_class: db.t3.medium
+  storage_gb: 50
+  multi_az: true
+  backup_retention_days: 14
+
+buckets:
+  - name: assets

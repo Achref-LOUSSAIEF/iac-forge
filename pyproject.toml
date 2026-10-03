@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "iac-forge"
+version = "0.1.0"
+description = "Generate AWS Terraform from a short YAML spec and validate it before deployment."
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = ["PyYAML>=6.0"]
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
+[project.scripts]
+iacforge = "iacforge.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["iacforge*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
